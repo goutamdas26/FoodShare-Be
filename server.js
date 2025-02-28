@@ -13,7 +13,9 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
-
+app.get('/', (req, res) => {
+  res.send("Hello World");
+});
 const PORT = process.env.PORT || 5000;
 
 connectDB();
