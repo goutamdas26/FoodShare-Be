@@ -3,7 +3,7 @@ const User = require('./User'); // Ensure User model is required
 
 const foodSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  category: { type: String, enum: ['human', 'pet'], required: true },
+  category: { type: String, enum: ['Human', 'Pet'], required: true },
   quantity: { type: String, required: false },
   location: { type: String, required: true },
   image: { type: String, required: false, default: "sdfsdf" },

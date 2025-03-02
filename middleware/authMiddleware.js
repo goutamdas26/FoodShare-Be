@@ -9,6 +9,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
+   
     req.user = decoded; // Attach user details from token payload
 
     next(); // Continue to the next middleware or route handler

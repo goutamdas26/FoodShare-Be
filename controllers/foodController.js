@@ -4,7 +4,7 @@ exports.addFood = async (req, res) => {
   try {
     const { foodName, category, quantity, location } = req.body;
     
-    console.log(req.body,category)
+  console.log(req.user,"ghhg")
     const donarName="RAJ ";
     const donor = "67c1bf319d2d86b28e9ce78a";
     const foodData={
