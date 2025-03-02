@@ -1,11 +1,21 @@
 const Food = require('../models/Food');
-
+const user = require('../models/User');
 exports.addFood = async (req, res) => {
   try {
-    const { name, category, quantity, expiryDate } = req.body;
-    const donor = req.user.userId;
-
-    const food = new Food({ name, category, quantity, expiryDate, donor });
+    const { foodName, category, quantity, location } = req.body;
+    
+    console.log(req.body,category)
+    const donarName="RAJ ";
+    const donor = "67c1bf319d2d86b28e9ce78a";
+    const foodData={
+      name:foodName,
+      category:category,
+      quantity:quantity,
+      location:location,
+      donor:donor,
+      donarName:donarName
+  }
+    const food = new Food(foodData);
     await food.save();
 
     res.status(201).json({ message: 'Food added successfully' });
