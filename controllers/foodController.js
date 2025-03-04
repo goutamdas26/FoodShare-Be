@@ -2,7 +2,7 @@ const Food = require('../models/Food');
 const user = require('../models/User');
 exports.addFood = async (req, res) => {
   try {
-    const { foodName, category, quantity, location } = req.body;
+    const { foodName, category, quantity, location,phone } = req.body;
     
   console.log(req.user,"ghhg")
     const donarName="RAJ ";
@@ -12,8 +12,9 @@ exports.addFood = async (req, res) => {
       category:category,
       quantity:quantity,
       location:location,
-      donor:donor,
-      donarName:donarName
+      donorDetails:donor,
+      donorName:donarName,
+      donorContact:phone
   }
     const food = new Food(foodData);
     await food.save();
@@ -26,7 +27,7 @@ exports.addFood = async (req, res) => {
 
 exports.getAvailableFood = async (req, res) => {
   try {
-    const foodItems = await Food.find({ status: 'available' }).populate('donor', 'name');
+    const foodItems = await Food.find({ status: 'available' }).populate("donorDetails","name");
     res.json(foodItems);
   } catch (error) {
     res.status(500).json({ error: error.message });
