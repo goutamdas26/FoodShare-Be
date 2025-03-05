@@ -10,7 +10,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const upload = multer();
 router.post("/add",authMiddleware,upload.none(), addFood);
 router.get("/available", getAvailableFood);
-router.post("/claim/:id", claimFood);
+router.post("/claim/:id", authMiddleware,claimFood);
 
 module.exports = router;
 
