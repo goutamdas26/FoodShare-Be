@@ -26,6 +26,27 @@ exports.addFood = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+exports.getClaimedFood = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Find the user and populate the donated food items
+    const user = await User.findById(userId).populate({
+      path: "claimed.foodItemId",
+      model: "Food",
+      select:
+        "name category quantity location status image donorName donorContact",
+    });
+  
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user.claimed);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 exports.getAvailableFood = async (req, res) => {
   try {
@@ -79,7 +100,7 @@ exports.getDonatedFood = async (req, res) => {
       select:
         "name category quantity location status image donorName donorContact",
     });
-console.log(user.donated)
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

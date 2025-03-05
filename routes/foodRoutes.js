@@ -6,6 +6,7 @@ const {
   getAvailableFood,
   claimFood,
   getDonatedFood,
+  getClaimedFood,
 } = require("../controllers/foodController");
 const authMiddleware = require("../middleware/authMiddleware");
 const upload = multer();
@@ -13,6 +14,7 @@ router.post("/add",authMiddleware,upload.none(), addFood);
 router.get("/available", getAvailableFood);
 router.post("/claim/:id", authMiddleware,claimFood);
 router.post("/getDonatedFood", authMiddleware, getDonatedFood);
+router.post("/getClaimedFood", authMiddleware, getClaimedFood);
 
 module.exports = router;
 
