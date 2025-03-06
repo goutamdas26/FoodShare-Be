@@ -37,7 +37,7 @@ exports.getClaimedFood = async (req, res) => {
       select:
         "name category quantity location status image donorName donorContact",
     });
-  
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -50,7 +50,7 @@ exports.getClaimedFood = async (req, res) => {
 
 exports.getAvailableFood = async (req, res) => {
   try {
-    const foodItems = await Food.find({ status: "available" }).populate(
+    const foodItems = await Food.find({ status: "Available" }).populate(
       "donorDetails",
       "name"
     );
@@ -74,7 +74,7 @@ exports.claimFood = async (req, res) => {
       return res.status(404).json({ message: "Food not available" });
     }
     // Update food status
-    food.status = "claimed";
+    food.status = "Claimed";
     food.claimedBy = userId;
     await food.save();
 
@@ -94,18 +94,25 @@ exports.getDonatedFood = async (req, res) => {
 
 
     // Find the user and populate the donated food items
-    const user = await User.findById(userId).populate({
+    const user = await User.findById(userId)
+    .populate({
       path: "donated.foodItemId",
       model: "Food",
       select:
-        "name category quantity location status image donorName donorContact",
+        "name category quantity location status image donorName donorContact postedAt claimedBy",
+      populate: {
+        path: "claimedBy",
+        model: "Users",
+         // Select only required fields
+         select:"name"
+      },
     });
-
+  
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    res.json(user);
+console.log(user.donated[0])
+    res.json(user.donated);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
