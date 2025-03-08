@@ -70,7 +70,7 @@ exports.claimFood = async (req, res) => {
 
     const food = await Food.findById(foodId);
 
-    if (!food || food.status !== "available") {
+    if (!food || food.status !== "Available") {
       return res.status(404).json({ message: "Food not available" });
     }
     // Update food status
@@ -117,3 +117,4 @@ console.log(user.donated[0])
     res.status(500).json({ error: error.message });
   }
 };
+
