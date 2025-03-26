@@ -2,7 +2,7 @@ const Food = require("../models/Food");
 const User = require("../models/User");
 exports.addFood = async (req, res) => {
   try {
-    const { foodName, category, quantity, location, phone } = req.body;
+    const { foodName, category, quantity, location, phone,expiry } = req.body;
 
     const { userId, name } = req.user;
 console.log(req.file)
@@ -14,6 +14,7 @@ console.log(req.file)
       donorDetails: userId,
       donorName: name,
       donorContact: phone,
+      expiry:expiry
     };
 
     const food = new Food(foodData);
