@@ -5,7 +5,7 @@ exports.addFood = async (req, res) => {
     const { foodName, category, quantity, location, phone } = req.body;
 
     const { userId, name } = req.user;
-
+console.log(req.file)
     const foodData = {
       name: foodName,
       category: category,
@@ -82,7 +82,7 @@ exports.claimFood = async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       $push: { claimed: { foodItemId: foodId, claimedAt: new Date() } },
     });
-
+console.log("done")
     res.json({ message: "Food claimed successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
