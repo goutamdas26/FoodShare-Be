@@ -67,18 +67,24 @@ exports.getClaimedFood = async (req, res) => {
     const userId = req.user.userId;
 
     // Find the user and populate the donated food items
-    const user = await User.findById(userId).populate({
-      path: "claimed.foodItemId",
-      model: "Food",
-      select:
-        "name category quantity location status image donorName donorContact",
-    });
-
-    if (!user) {
+    // const user = await User.findById(userId).populate({
+    //   path: "claimed.foodItemId",
+    //   model: "Food",
+    //   select:
+    //     "name category quantity location status image donorName donorContact donor ",
+    //     populate: {
+    //       path: "donor",
+    //       model: "Users",
+    //        // Select only required fields
+    //        select:"name"
+    //     },
+    // });
+const food=await User.findById(userId).populate("claimed.foodItemId").populate("claimed.foodItemId.donor.userId")
+    if (!food) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(user.claimed);
+    res.json(food.claimed);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -86,8 +92,10 @@ exports.getClaimedFood = async (req, res) => {
 
 exports.getAvailableFood = async (req, res) => {
   try {
+    const {userId}=req.user
     const foodItems = await Food.find({ status: "Available" });
-    res.json(foodItems);
+    const filteredFood=foodItems.filter((item)=>item.donor.userId!=userId)
+    res.json(filteredFood);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -131,8 +139,7 @@ exports.getDonatedFood = async (req, res) => {
     .populate({
       path: "donated.foodItemId",
       model: "Food",
-      select:
-        "name category quantity location status image donorName donorContact postedAt claimedBy",
+      
       populate: {
         path: "claimedBy",
         model: "Users",

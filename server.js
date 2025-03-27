@@ -5,7 +5,7 @@ const connectDB = require('./config/db');
 const multer = require("multer");
 const authRoutes = require('./routes/authRoutes');
 const foodRoutes = require('./routes/foodRoutes');
-
+const kycRoutes = require("./routes/kycRoutes");
 const app = express();
 
 // Middleware
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
-
+app.use("/api/kyc", kycRoutes);
 app.get('/', (req, res) => {
   res.send("Hello World");
 });

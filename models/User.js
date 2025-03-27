@@ -9,13 +9,13 @@ const userSchema = new mongoose.Schema(
     image: { type: String, default: "https://via.placeholder.com/150" },
     donated: [
       {
-        foodItemId: { type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }, // Reference to claimed food item
+        foodItemId: { type: mongoose.Schema.Types.ObjectId, ref: "Food" }, // Reference to claimed food item
          // Timestamp when claimed
       },
     ], // List of donated food items
     claimed: [
       {
-        foodItemId: { type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }, // Reference to claimed food item
+        foodItemId: { type: mongoose.Schema.Types.ObjectId, ref: "Food" }, // Reference to claimed food item
         claimedAt: { type: Date, default: Date.now }, // Timestamp when claimed
       },
     ],
