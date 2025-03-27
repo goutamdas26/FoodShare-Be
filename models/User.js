@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    contactNumber: { type: String },
+    phone: { type: Number },
     image: { type: String, default: "https://via.placeholder.com/150" },
     donated: [
       {

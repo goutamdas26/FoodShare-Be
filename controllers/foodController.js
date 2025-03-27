@@ -1,32 +1,67 @@
 const Food = require("../models/Food");
 const User = require("../models/User");
+// exports.addFood = async (req, res) => {
+
+//   try {
+//     const { foodName, category, quantity, location, phone,expiry } = req.body;
+
+//     const { userId, name } = req.user;
+// console.log(req.file)
+//     const foodData = {
+//       name: foodName,
+//       category: category,
+//       quantity: quantity,
+//       location: location,
+//       donorDetails: userId,
+//       donorName: name,
+//       donorContact: phone,
+//       expiry:expiry
+//     };
+
+//     const food = new Food(foodData);
+//     await food.save();
+//     await User.findByIdAndUpdate(userId, {
+//       $push: { donated: { foodItemId: food._id } },
+//     });
+//     res.status(201).json({ message: "Food added successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 exports.addFood = async (req, res) => {
   try {
-    const { foodName, category, quantity, location, phone,expiry } = req.body;
-
+    const { foodName, category, quantity, location, phone, expiry } = req.body;
     const { userId, name } = req.user;
-console.log(req.file)
+
+    console.log(req.file); // Keeping your console log for debugging
+
     const foodData = {
       name: foodName,
-      category: category,
-      quantity: quantity,
-      location: location,
-      donorDetails: userId,
-      donorName: name,
-      donorContact: phone,
+      category,
+      quantity: quantity || 1, // Default to 1 if not provided
+      location,
+      donor: {
+        userId, // Updated field name
+        name,
+        phone: phone, // Updated field name
+      },
+      // expiry: expiry ? new Date(expiry) : undefined, // Ensuring expiry is a Date object
       expiry:expiry
     };
 
     const food = new Food(foodData);
     await food.save();
+
     await User.findByIdAndUpdate(userId, {
       $push: { donated: { foodItemId: food._id } },
     });
+
     res.status(201).json({ message: "Food added successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 exports.getClaimedFood = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -51,10 +86,7 @@ exports.getClaimedFood = async (req, res) => {
 
 exports.getAvailableFood = async (req, res) => {
   try {
-    const foodItems = await Food.find({ status: "Available" }).populate(
-      "donorDetails",
-      "name"
-    );
+    const foodItems = await Food.find({ status: "Available" });
     res.json(foodItems);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -12,16 +12,16 @@ const app = express();
 app.use(cors({ origin: "*" })); // Adjust this if needed
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Parses form data (important for `FormData` from frontend)
-// app.use((req, res, next) => {
-//   console.log("🔥 Incoming Request:");
-//   console.log("➡️ Headers:", req.headers);
-//   console.log("➡️ Method:", req.method);
-//   console.log("➡️ URL:", req.originalUrl);
-//   console.log("➡️ Body:", req.body);
-//   console.log("➡️ Query:", req.query);
-//   console.log("➡️ Params:", req.params);
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log("🔥 Incoming Request:");
+  console.log("➡️ Headers:", req.headers);
+  console.log("➡️ Method:", req.method);
+  console.log("➡️ URL:", req.originalUrl);
+  console.log("➡️ Body:", req.body);
+  console.log("➡️ Query:", req.query);
+  console.log("➡️ Params:", req.params);
+  next();
+});
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
