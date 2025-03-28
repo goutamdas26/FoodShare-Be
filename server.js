@@ -6,6 +6,7 @@ const multer = require("multer");
 const authRoutes = require('./routes/authRoutes');
 const foodRoutes = require('./routes/foodRoutes');
 const kycRoutes = require("./routes/kycRoutes");
+const userRoutes = require("./routes/userRoutes");
 const app = express();
 
 // Middleware
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Parses form data (important for `FormData` from frontend)
 app.use((req, res, next) => {
   console.log("🔥 Incoming Request:");
+ // Logging the incoming request origin
   console.log("➡️ Headers:", req.headers);
   console.log("➡️ Method:", req.method);
   console.log("➡️ URL:", req.originalUrl);
@@ -26,6 +28,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
 app.use("/api/kyc", kycRoutes);
+app.use("/api/user", userRoutes);
 app.get('/', (req, res) => {
   res.send("Hello World");
 });

@@ -58,11 +58,11 @@ const foodSchema = new mongoose.Schema(
       type: String,
       default: "https://via.placeholder.com/150",
     },
-    donor: {
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+    donorDetails: {
       name: { type: String },
       phone: { type: String },
     },
+    donor: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     postedAt: { type: Date, default: Date.now }, // Use Date object for consistency
     status: {
       type: String,
@@ -72,6 +72,7 @@ const foodSchema = new mongoose.Schema(
     expiry: { type: String }, // Expiry should be a Date type for easy comparisons
     claimedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     claimedAt: { type: Date },
+    description:String
   },
   { timestamps: true }
 );

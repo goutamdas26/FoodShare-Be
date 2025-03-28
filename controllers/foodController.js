@@ -30,7 +30,15 @@ const User = require("../models/User");
 // };
 exports.addFood = async (req, res) => {
   try {
-    const { foodName, category, quantity, location, phone, expiry } = req.body;
+    const {
+      foodName,
+      category,
+      quantity,
+      location,
+      phone,
+      expiry,
+      description,
+    } = req.body;
     const { userId, name } = req.user;
 
     console.log(req.file); // Keeping your console log for debugging
@@ -40,13 +48,14 @@ exports.addFood = async (req, res) => {
       category,
       quantity: quantity || 1, // Default to 1 if not provided
       location,
-      donor: {
-        userId, // Updated field name
+      donorDetails: {
         name,
         phone: phone, // Updated field name
       },
+      donor: userId,
       // expiry: expiry ? new Date(expiry) : undefined, // Ensuring expiry is a Date object
-      expiry:expiry
+      expiry: expiry,
+      description,
     };
 
     const food = new Food(foodData);
@@ -79,12 +88,23 @@ exports.getClaimedFood = async (req, res) => {
     //        select:"name"
     //     },
     // });
-const food=await User.findById(userId).populate("claimed.foodItemId").populate("claimed.foodItemId.donor.userId")
-    if (!food) {
+    const user = await User.findById(userId).populate({
+      path: "claimed.foodItemId",
+      model: "Food",
+
+      populate: {
+        path: "donor",
+        model: "Users",
+        // Select only required fields
+        select: "name",
+      },
+    });
+    console.log(JSON.stringify(user,null,2));
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(food.claimed);
+    res.json(user.claimed);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -93,8 +113,8 @@ const food=await User.findById(userId).populate("claimed.foodItemId").populate("
 exports.getAvailableFood = async (req, res) => {
   try {
     const {userId}=req.user
-    const foodItems = await Food.find({ status: "Available" });
-    const filteredFood=foodItems.filter((item)=>item.donor.userId!=userId)
+    const foodItems = await Food.find({ status: "Available" }).populate("donor");
+    const filteredFood=foodItems.filter((item)=>item.donor!=userId)
     res.json(filteredFood);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -144,7 +164,7 @@ exports.getDonatedFood = async (req, res) => {
         path: "claimedBy",
         model: "Users",
          // Select only required fields
-         select:"name"
+      
       },
     });
   

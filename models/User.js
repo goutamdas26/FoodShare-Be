@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema(
         claimedAt: { type: Date, default: Date.now }, // Timestamp when claimed
       },
     ],
+    address:String,
+    phone:Number
   },
   { timestamps: true }
 );
