@@ -72,7 +72,8 @@ const foodSchema = new mongoose.Schema(
     expiry: { type: String }, // Expiry should be a Date type for easy comparisons
     claimedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     claimedAt: { type: Date },
-    description:String
+    description:String,
+    images: { type: [String], required: false },
   },
   { timestamps: true }
 );

@@ -38,10 +38,11 @@ exports.addFood = async (req, res) => {
       phone,
       expiry,
       description,
+      images
     } = req.body;
     const { userId, name } = req.user;
 
-    console.log(req.file); // Keeping your console log for debugging
+  
 
     const foodData = {
       name: foodName,
@@ -56,6 +57,7 @@ exports.addFood = async (req, res) => {
       // expiry: expiry ? new Date(expiry) : undefined, // Ensuring expiry is a Date object
       expiry: expiry,
       description,
+      images
     };
 
     const food = new Food(foodData);
@@ -113,7 +115,8 @@ exports.getClaimedFood = async (req, res) => {
 exports.getAvailableFood = async (req, res) => {
   try {
     const {userId}=req.user
-    const foodItems = await Food.find({ status: "Available" }).populate("donor");
+    const foodItems = await Food.find({ status: "Available" });
+
     const filteredFood=foodItems.filter((item)=>item.donor!=userId)
     res.json(filteredFood);
   } catch (error) {
