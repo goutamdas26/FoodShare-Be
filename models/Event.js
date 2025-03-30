@@ -7,10 +7,11 @@ const FoodCharityEventSchema = new mongoose.Schema(
     description: { type: String, required: true },
     startDate: { type: Date, required: true }, // Event start date
     endDate: { type: Date, required: true }, // Event end date
-    time: { type: String, required: true }, // Example: "10:00 AM - 2:00 PM"
+    startTime: { type: String, required: true }, // Example: "10:00 AM - 2:00 PM"
+    endTime: { type: String, required: true }, // Example: "10:00 AM - 2:00 PM"
     location: { type: String, required: true },
     contact: { type: String, required: true },
-    images: [{ type: String }], // URLs of event images
+    // images: [{ type: String }], // URLs of event images
     status: { type: String, enum: ["Upcoming", "Ongoing", "Completed"], default: "Upcoming" },
   },
   { timestamps: true }
