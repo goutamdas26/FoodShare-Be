@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer'); // Import nodemailer for sending emails
+const otpGenerator = require('otp-generator'); // Import otp-generator for generating OTPs
 
 exports.register = async (req, res) => {
   try {
@@ -19,7 +20,6 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    console.log("object")
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
@@ -31,6 +31,74 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ userId: user._id ,name:user.name,email:user.email}, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.json({ token ,user:user1});
     
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// OTP Sending Controller
+exports.sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(email);
+    const user = await User.findOne({ email });
+    console.log(user);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false }); // Generate a 6-digit OTP
+    user.otp = otp; // Store OTP in user model (make sure to add otp field in User model)
+    await user.save();
+
+    // Send email with OTP
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      to: email,
+      subject: 'Your OTP Code',
+      text: `Your OTP code is: ${otp}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).json({ error: 'Error sending email' });
+      }
+      res.status(200).json({ message: 'OTP sent to your email' });
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Reset Password Controller
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Hash the new password before saving
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.otp = null; // Clear OTP after successful reset
+    await user.save();
+
+    res.json({ message: 'Password reset successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
