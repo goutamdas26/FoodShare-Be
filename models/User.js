@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema(
       },
     ],
     address:String,
-    phone:Number
+    phone: { type: Number }, // Corrected the property name to 'type'
+    kycStatus: { type: String, default: "Not Verified" } // Corrected 'Type' to 'type'
   },
   { timestamps: true }
 );

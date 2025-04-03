@@ -139,7 +139,10 @@ router.post(
         backImage: backImageURL,
         status: "Pending",
       });
-  User.kycStatus="Verified"
+  const user=await User.findOne({_id:userId})
+  user.kycStatus="Verified"
+  await user.save()
+
       await newKYC.save();
       res.status(201).json({ message: "KYC submitted successfully", kyc: newKYC });
     } catch (error) {
@@ -153,8 +156,9 @@ router.post(
 // Get KYC Status for a user
 router.post("/status", async (req, res) => {
   const {id}=req.body
+  console.log(id)
   try {
-    const kyc = await KYCVerification.findOne({ userId: req.params.id });
+    const kyc = await KYCVerification.findOne({ userId: id });
     if (!kyc) {
       return res.status(404).json({ message: "KYC not found" });
     }
