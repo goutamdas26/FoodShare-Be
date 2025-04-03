@@ -27,7 +27,7 @@ console.log(email,password)
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    const user1 = await User.findOne({ email }).select("name email phone");
+    const user1 = await User.findOne({ email }).select("name email phone kycStatus");
 console.log("object")
     const token = jwt.sign({ userId: user._id ,name:user.name,email:user.email}, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.json({ token ,user:user1});

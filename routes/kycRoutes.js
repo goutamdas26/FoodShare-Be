@@ -67,7 +67,7 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const KYCVerification = require("../models/Verification");
 const router = express.Router();
-
+const User=require("../models/User")
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -139,7 +139,7 @@ router.post(
         backImage: backImageURL,
         status: "Pending",
       });
-
+  User.kycStatus="Verified"
       await newKYC.save();
       res.status(201).json({ message: "KYC submitted successfully", kyc: newKYC });
     } catch (error) {
@@ -147,12 +147,14 @@ router.post(
       res.status(500).json({ message: "Server error", error: error.message });
     }
   }
+
 );
 
 // Get KYC Status for a user
-router.get("/status/:userId", async (req, res) => {
+router.post("/status", async (req, res) => {
+  const {id}=req.body
   try {
-    const kyc = await KYCVerification.findOne({ userId: req.params.userId });
+    const kyc = await KYCVerification.findOne({ userId: req.params.id });
     if (!kyc) {
       return res.status(404).json({ message: "KYC not found" });
     }
