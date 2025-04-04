@@ -6,8 +6,9 @@ const jwt = require("jsonwebtoken");
 const Otp = require("../models/Otp");
 exports.register = async (req, res) => {
   try {
- 
     const { name, email, password } = req.body;
+    const isExist=await User.findOne({email:email})
+    if(isExist)return res.status(409 ).json({ error: "E-mail already taken" });
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({ name, email, password: hashedPassword });
@@ -118,10 +119,17 @@ exports.verifyOtp=async(req,res)=>{
    await Otp.deleteMany({ email }); // Remove OTP after verification
    res.status(200).json({ message: "OTP verified successfully" });
 }
-exports.resetpassword=async(req,res)=>{
-    const { email, newPassword } = req.body;
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+exports.resetpassword = async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await User.findOneAndUpdate({ email }, { password: hashedPassword });
-    res.status(200).json({ message: "Password updated successfully" });
+        const user = await User.findOneAndUpdate({ email }, { password: hashedPassword });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 }

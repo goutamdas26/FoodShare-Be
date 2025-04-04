@@ -4,7 +4,7 @@ const User = require("../models/User");
 // Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address,profileImage } = req.body;
 
     const newUser = new User({
       name,
@@ -12,6 +12,7 @@ exports.createUser = async (req, res) => {
       password,
       phone,
       address,
+      profileImage
     });
 
     await newUser.save();
@@ -25,7 +26,7 @@ exports.createUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const {userId} = req.user;
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("name address email phone profileImage");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -41,7 +42,7 @@ exports.getUserByID = async (req, res) => {
      console.log("userId");
   try {
  
-    const user = await User.findById(userId).select("name address email phone");
+    const user = await User.findById(userId).select("name address email phone profileImage");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -58,13 +59,14 @@ exports.getUserByID = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
    const { userId } = req.user;
-    const { name, email, phone, address } = req.body;
-
+    const { name, email, phone, address,profileImage } = req.body;
+console.log(req.body)
     const user = await User.findById(userId);
     user.address=address
     user.name=name
 user.email=email
 user.phone=phone
+user.profileImage=profileImage
 user.save()
 if (!user) {
     return res.status(404).json({ message: "User not found" });
