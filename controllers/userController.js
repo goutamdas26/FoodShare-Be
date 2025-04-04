@@ -36,6 +36,23 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+exports.getUserByID = async (req, res) => {
+     const { userId } = req.body;
+     console.log("userId");
+  try {
+ 
+    const user = await User.findById(userId).select("name address email phone");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // Update user details
 exports.updateUser = async (req, res) => {

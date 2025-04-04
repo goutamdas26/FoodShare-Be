@@ -8,6 +8,7 @@ router.post('/', userController.createUser);
 
 // Get user by ID
 router.get('/',authMiddleware, userController.getUserById);
+router.post('/details', userController.getUserByID);
 
 // Update user details
 router.put('/update', authMiddleware,userController.updateUser);
