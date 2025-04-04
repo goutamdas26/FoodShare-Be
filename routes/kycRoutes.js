@@ -109,11 +109,11 @@ router.post(
         return res.status(400).json({ message: "All fields are required" });
       }
 
-      console.log("Received KYC Submission for User:", userId);
+      console.log("Received KYC Submission for User:");
 
       // Check if KYC already exists
       const existingKYC = await KYCVerification.findOne({userId:userId});
-      console.log(existingKYC,"sfsd")
+ 
       if (existingKYC) {
         return res.status(400).json({ message: "KYC already submitted with this ID" });
       }
@@ -126,8 +126,7 @@ router.post(
         uploadToCloudinary(req.files.backImage[0].buffer, "kyc_verifications"),
       ]);
 
-      console.log("Front Image URL:", frontImageURL);
-      console.log("Back Image URL:", backImageURL);
+   
 
       // Save KYC details in the database
       const newKYC = new KYCVerification({
@@ -156,7 +155,7 @@ router.post(
 // Get KYC Status for a user
 router.post("/status", async (req, res) => {
   const {id}=req.body
-  console.log(id)
+console.log(id)
   try {
     const kyc = await KYCVerification.findOne({ userId: id });
     if (!kyc) {

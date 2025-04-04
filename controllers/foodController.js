@@ -101,7 +101,7 @@ exports.getClaimedFood = async (req, res) => {
         select: "name",
       },
     });
-    console.log(JSON.stringify(user,null,2));
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -146,7 +146,7 @@ exports.claimFood = async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       $push: { claimed: { foodItemId: foodId, claimedAt: new Date() } },
     });
-console.log("done")
+
     res.json({ message: "Food claimed successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -174,7 +174,7 @@ exports.getDonatedFood = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-console.log(user.donated[0])
+
     res.json(user.donated);
   } catch (error) {
     res.status(500).json({ error: error.message });

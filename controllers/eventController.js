@@ -2,9 +2,10 @@ const FoodCharityEvent = require("../models/Event");
 
 // Create a new event
 exports.createEvent = async (req, res) => {
+
   try {
     const { title, description, startDate, endDate, startTime,endTime, location, contact, } = req.body;
-    console.log(req.user.userId)
+    
     const newEvent = new FoodCharityEvent({
       title,
       postedBy: req.user.userId, // Assuming userId is available in req.user
@@ -28,7 +29,7 @@ exports.createEvent = async (req, res) => {
 
 // Get all events
 exports.getAllEvents = async (req, res) => {
-    console.log("dsf")
+
 
   try {
     const events = await FoodCharityEvent.find();

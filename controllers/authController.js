@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const Otp = require("../models/Otp");
 exports.register = async (req, res) => {
   try {
-    console.log(req.body)
+ 
     const { name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -23,12 +23,12 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-console.log(email,password)
+
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    const user1 = await User.findOne({ email }).select("name email phone kycStatus");
-console.log("object")
+    const user1 = await User.findOne({ email }).select("name email phone kycStatus address");
+
     const token = jwt.sign({ userId: user._id ,name:user.name,email:user.email}, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.json({ token ,user:user1});
     
@@ -42,7 +42,7 @@ console.log("object")
 exports.sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email);
+    
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -108,7 +108,7 @@ exports.resetPassword = async (req, res) => {
   }
 };
 exports.verifyOtp=async(req,res)=>{
-  console.log(req.body)
+  
    const { email, otp } = req.body;
    const otpRecord = await Otp.findOne({ email, otp });
 

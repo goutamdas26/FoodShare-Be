@@ -20,23 +20,7 @@ app.use(express.urlencoded({ extended: true })); // Parses form data
 // Morgan for logging HTTP requests
 app.use(morgan('dev'));
 
-// Custom Logging Middleware (optional, for additional logs)
-// app.use((req, res, next) => {
-//   const start = Date.now();
-//   console.log("🔥 Incoming Request:");
-//   console.log("➡️ Method:", req.method);
-//   console.log("➡️ URL:", req.originalUrl);
-//   console.log("➡️ Body:", req.body);
-//   console.log("➡️ Query:", req.query);
-//   console.log("➡️ Params:", req.params);
 
-//   res.on('finish', () => {
-//     const duration = Date.now() - start;
-//     console.log(`⏱️ ${req.method} ${req.originalUrl} took ${duration}ms`);
-//   });
-
-//   next();
-// });
 
 // Routes
 app.use('/api/auth', authRoutes);

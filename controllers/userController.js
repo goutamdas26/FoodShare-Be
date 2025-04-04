@@ -52,7 +52,6 @@ user.save()
 if (!user) {
     return res.status(404).json({ message: "User not found" });
 }
-console.log(user)
 
     res.status(200).json({ message: "User updated successfully", user });
   } catch (error) {
