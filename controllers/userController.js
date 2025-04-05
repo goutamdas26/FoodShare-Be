@@ -26,7 +26,7 @@ exports.createUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const {userId} = req.user;
-    const user = await User.findById(userId).select("name address email phone profileImage");
+    const user = await User.findById(userId).select("name address email phone profileImage kycStatus");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
