@@ -4,7 +4,7 @@ const FoodCharityEvent = require("../models/Event");
 exports.createEvent = async (req, res) => {
 
   try {
-    const { title, description, startDate, endDate, startTime,endTime, location, contact, } = req.body;
+    const { title, description, startDate, endDate, startTime,endTime, location, contact, imageUrl} = req.body;
     
     const newEvent = new FoodCharityEvent({
       title,
@@ -15,7 +15,8 @@ exports.createEvent = async (req, res) => {
       startTime,
       location,
       contact,
-      endTime
+      endTime,
+      imageUrl
       
     });
 

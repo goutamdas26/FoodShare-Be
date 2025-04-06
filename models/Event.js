@@ -13,6 +13,7 @@ const FoodCharityEventSchema = new mongoose.Schema(
     contact: { type: String, required: true },
     // images: [{ type: String }], // URLs of event images
     status: { type: String, enum: ["Upcoming", "Ongoing", "Completed"], default: "Upcoming" },
+    imageUrl:String
   },
   { timestamps: true }
 );

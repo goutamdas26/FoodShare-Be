@@ -9,6 +9,7 @@ const foodRoutes = require('./routes/foodRoutes');
 const kycRoutes = require("./routes/kycRoutes");
 const userRoutes = require("./routes/userRoutes");
 const EventRoutes = require("./routes/eventRoutes");
+const resetRoutes = require("./routes/resetRoutes");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/food', foodRoutes);
 app.use("/api/kyc", kycRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/events", EventRoutes);
+app.use("/api/reset", resetRoutes);
 
 app.get('/', (req, res) => {
   res.send("Hello World");

@@ -1,33 +1,7 @@
 const Food = require("../models/Food");
 const User = require("../models/User");
-// exports.addFood = async (req, res) => {
-
-//   try {
-//     const { foodName, category, quantity, location, phone,expiry } = req.body;
-
-//     const { userId, name } = req.user;
-// console.log(req.file)
-//     const foodData = {
-//       name: foodName,
-//       category: category,
-//       quantity: quantity,
-//       location: location,
-//       donorDetails: userId,
-//       donorName: name,
-//       donorContact: phone,
-//       expiry:expiry
-//     };
-
-//     const food = new Food(foodData);
-//     await food.save();
-//     await User.findByIdAndUpdate(userId, {
-//       $push: { donated: { foodItemId: food._id } },
-//     });
-//     res.status(201).json({ message: "Food added successfully" });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+const sendEmail = require("../utils/sendEmail");
+const claimTemplate = require("../utils/templates/claimTemplate");
 exports.addFood = async (req, res) => {
   try {
     const {
@@ -77,19 +51,6 @@ exports.getClaimedFood = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    // Find the user and populate the donated food items
-    // const user = await User.findById(userId).populate({
-    //   path: "claimed.foodItemId",
-    //   model: "Food",
-    //   select:
-    //     "name category quantity location status image donorName donorContact donor ",
-    //     populate: {
-    //       path: "donor",
-    //       model: "Users",
-    //        // Select only required fields
-    //        select:"name"
-    //     },
-    // });
     const user = await User.findById(userId).populate({
       path: "claimed.foodItemId",
       model: "Food",
@@ -101,13 +62,13 @@ exports.getClaimedFood = async (req, res) => {
         select: "name",
       },
     });
-
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     res.json(user.claimed);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };
@@ -118,6 +79,7 @@ exports.getAvailableFood = async (req, res) => {
     const foodItems = await Food.find({ status: "Available" });
 
     const filteredFood=foodItems.filter((item)=>item.donor!=userId)
+   
     res.json(filteredFood);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -132,7 +94,7 @@ exports.claimFood = async (req, res) => {
 
     const userId = req.user.userId;
 
-    const food = await Food.findById(foodId);
+    const food = await Food.findById(foodId).populate("donor");
 
     if (!food || food.status !== "Available") {
       return res.status(404).json({ message: "Food not available" });
@@ -146,9 +108,22 @@ exports.claimFood = async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       $push: { claimed: { foodItemId: foodId, claimedAt: new Date() } },
     });
+    
+    const user=await User.findById(userId).select("name email phone address")
+    // Add a debug log to verify data before sending
+console.log("Sending claim email to:", food?.donor?.email);
+console.log("Claimer Info:", user);
 
+
+    await sendEmail({
+      from:"Food Share App ",
+      to: food?.donor?.email,
+      subject: "Your food has been claimed!",
+      text: claimTemplate(user,food.name),
+    });
     res.json({ message: "Food claimed successfully" });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };
@@ -158,18 +133,18 @@ exports.getDonatedFood = async (req, res) => {
 
 
     // Find the user and populate the donated food items
-    const user = await User.findById(userId)
-    .populate({
+    const user = await User.findById(userId).populate({
       path: "donated.foodItemId",
       model: "Food",
-      
       populate: {
         path: "claimedBy",
         model: "Users",
-         // Select only required fields
-      
+        // Select only required fields
+        select: "name phone",
       },
+   
     });
+console.log("donated..",JSON.stringify(user.donated,null,2))
   
     if (!user) {
       return res.status(404).json({ message: "User not found" });
