@@ -24,10 +24,11 @@ exports.sendOtp = async (req, res) => {
   
       // Use the extracted utility
       await sendEmail({
+        from:`"Food Share App" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: "Your OTP Code",
         text: `Your OTP code is: ${otp}`,
-        html:"<h1>hello</h1>"
+    
       });
   
       res.status(200).json({ message: "OTP sent to your email" });

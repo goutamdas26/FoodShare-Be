@@ -7,12 +7,12 @@ const Otp = require("../models/Otp");
 const sendEmail = require("../utils/sendEmail");
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password,address,phone } = req.body;
     const isExist=await User.findOne({email:email})
     if(isExist)return res.status(409 ).json({ error: "E-mail already taken" });
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({ name, email, password: hashedPassword });
+    const user = new User({ name, email, password: hashedPassword ,address,phone});
     await user.save();
 
     res.status(201).json({ message: 'User registered successfully' });

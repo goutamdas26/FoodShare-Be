@@ -33,23 +33,36 @@
   
 
 const claimtemplate = (claimer, food) => {
-    return `
-  🍽️ Food Claimed!
-  
-  Thank you for your kind donation. Someone has claimed the food item. Please coordinate the pickup or delivery accordingly.
-  
-  📝 Claim Details:
-  - Food Claimed: ${food}
-  - Claimer Name: ${claimer.name}
-  - Email: ${claimer.email}
-  - Phone: ${claimer.phone}
-  - Location: ${claimer.address || 'No address provided'}
-  
-  🙏 Thanks again for helping reduce food waste and spreading kindness.
-  
-  FoodShare | Spreading Meals, Spreading Smiles
+    return  `
+    <h3>Food Claimed: ${food}</h3>
+    <p><strong>Claimer Name:</strong> ${claimer.name}</p>
+    <p><strong>Email:</strong> ${claimer.email}</p>
+    <p><strong>Phone:</strong> ${claimer.phone}</p>
+    <p><strong>Location:</strong> ${claimer.address ||'No address provided'}</p>
+    <hr>
+    <p>Please coordinate the pickup/delivery. Thank you for donating!</p>
   `;
   };
   
   module.exports = claimtemplate;
+// const claimtemplate = (claimer, food) => {
+//     return `
+//   🍽️ Food Claimed!
+  
+//   Thank you for your kind donation. Someone has claimed the food item. Please coordinate the pickup or delivery accordingly.
+  
+//   📝 Claim Details:
+//   - Food Claimed: ${food}
+//   - Claimer Name: ${claimer.name}
+//   - Email: ${claimer.email}
+//   - Phone: ${claimer.phone}
+//   - Location: ${claimer.address || 'No address provided'}
+  
+//   🙏 Thanks again for helping reduce food waste and spreading kindness.
+  
+//   FoodShare | Spreading Meals, Spreading Smiles
+//   `;
+//   };
+  
+//   module.exports = claimtemplate;
   

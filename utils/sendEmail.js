@@ -12,7 +12,7 @@ const sendEmail = async ({ to, subject, text ,html}) => {
     });
 
     const mailOptions = {
-      from: "Food Share App",
+      from: `"Food Share App" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text,

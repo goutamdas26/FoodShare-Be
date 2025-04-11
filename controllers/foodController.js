@@ -116,10 +116,10 @@ console.log("Claimer Info:", user);
 
 
     await sendEmail({
-      from:"Food Share App ",
+      from:`"Food Share App" <${process.env.EMAIL_USER}>`,
       to: food?.donor?.email,
       subject: "Your food has been claimed!",
-      text: claimTemplate(user,food.name),
+      html: claimTemplate(user,food.name),
     });
     res.json({ message: "Food claimed successfully" });
   } catch (error) {
