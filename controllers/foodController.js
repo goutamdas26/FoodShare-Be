@@ -59,7 +59,7 @@ exports.getClaimedFood = async (req, res) => {
         path: "donor",
         model: "Users",
         // Select only required fields
-        select: "name",
+        select: "name _id",
       },
     });
     if (!user) {
