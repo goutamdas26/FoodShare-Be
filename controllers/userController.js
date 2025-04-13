@@ -1,5 +1,6 @@
 
 const User = require("../models/User");
+const sendEmail = require("../utils/sendEmail");
 
 // Create a new user
 exports.createUser = async (req, res) => {
@@ -93,3 +94,37 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
+exports.contactUs = async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body;
+
+    // Validate input
+    if (!name || !email || !phone || !message) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Set up the email transporter
+
+
+    // Email options
+    await sendEmail({
+      from:`"Food Share App" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER, // Your email where you want to receive messages
+      subject: `Contact Us Message from ${name}`,
+      text: `You have received a new message from the contact form:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`
+    })
+
+    // Send the email
+
+    // Send a response back to the client
+    res.status(200).json({ message: "Your message has been sent successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+

@@ -12,6 +12,7 @@ router.post('/details', userController.getUserByID);
 
 // Update user details
 router.put('/update', authMiddleware,userController.updateUser);
+router.post('/contact-us', userController.contactUs);
 
 // Delete user
 router.delete('/:id', userController.deleteUser);
