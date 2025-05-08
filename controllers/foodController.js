@@ -76,9 +76,9 @@ exports.getClaimedFood = async (req, res) => {
 exports.getAvailableFood = async (req, res) => {
   try {
     const {userId}=req.user
-    const foodItems = await Food.find({ status: "Available" });
+    const foodItems = await Food.find({ status: "Available" }).populate("donor" ,"kycStatus");
 
-    const filteredFood=foodItems.filter((item)=>item.donor!=userId)
+    const filteredFood=foodItems.filter((item)=>item.donor._id!=userId)
    
     res.json(filteredFood);
   } catch (error) {

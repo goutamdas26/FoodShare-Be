@@ -35,7 +35,7 @@
 const claimtemplate = (claimer, food) => {
     return  `
     <h3>Food Claimed: ${food}</h3>
-    <p><strong>Claimer Name:</strong> ${claimer.name}</p>
+    <p><strong>Claimed By:</strong> ${claimer.name}</p>
     <p><strong>Email:</strong> ${claimer.email}</p>
     <p><strong>Phone:</strong> ${claimer.phone}</p>
     <p><strong>Location:</strong> ${claimer.address ||'No address provided'}</p>
