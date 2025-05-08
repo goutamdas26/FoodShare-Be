@@ -43,7 +43,7 @@ exports.getUserByID = async (req, res) => {
      console.log("userId");
   try {
  
-    const user = await User.findById(userId).select("name address email phone profileImage");
+    const user = await User.findById(userId).select("name address email phone profileImage kycStatus");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
