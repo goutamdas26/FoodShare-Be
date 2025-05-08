@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone: { type: Number },
-    image: { type: String,  },
+    image: { type: String,default:""  },
     donated: [
       {
         foodItemId: { type: mongoose.Schema.Types.ObjectId, ref: "Food" }, // Reference to claimed food item
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: Number }, // Corrected the property name to 'type'
     kycStatus: { type: String, default: "Not Verified" } // Corrected 'Type' to 'type',
     ,
-    profileImage:String
+    profileImage:{type:String,default:"https://res.cloudinary.com/dl92zh3w0/image/upload/v1744383503/Avatar-Profile-Vector-PNG-Pic_z3sbbw.png"}
   },
   { timestamps: true }
 );
